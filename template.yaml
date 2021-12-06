@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  web-to-png-pdf
+
+  Sample SAM Template for web-to-png-pdf
+  Output: https://zpsqis0lw5.execute-api.us-east-1.amazonaws.com/Prod/?url=https://google.com
+  
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 4096
+
+Resources:
+  ConvertFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: hello-world/
+      Handler: app.lambdaHandler
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      Layers:
+        - !Sub 'arn:aws:lambda:${AWS::Region}:764866452798:layer:chrome-aws-lambda:25'
+      Events:
+        Convert:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /
+            Method: get
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  ConvertApi:
+    Description: "API Gateway endpoint URL for Prod stage for Convert function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/?url=https://google.com"
+  ConvertFunction:
+    Description: "Convert Lambda Function ARN"
+    Value: !GetAtt ConvertFunction.Arn
+  ConvertFunctionIamRole:
+    Description: "Implicit IAM Role created for Convert function"
+    Value: !GetAtt ConvertFunctionRole.Arn

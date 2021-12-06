@@ -1,0 +1,10 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "web-to-png-pdf"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1qee6z1zzq6ir"
+s3_prefix = "web-to-png-pdf"
+region = "us-east-1"
+capabilities = "CAPABILITY_IAM"
+image_repositories = []
